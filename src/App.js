@@ -1,21 +1,35 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
-import products from './data/products';
-import Header from './components/Header';
-import ProductList from './components/ProductList';
+import { CardProvider } from './context/CardContext';
+import GlobalStyle from './styles/GlobalStyles';
+import ProductListScreen from './screens/ProductListScreen';
+import ProductDetailScreen from './screens/ProductDetailScreen';
+import CartScreen from './screens/CartScreen';
+import OrderCompleteScreen from './screens/OrderCompleteScreen';
+import CardListScreen from './screens/CardListScreen';
+import AddCardScreen from './screens/AddCardScreen';
+import PaymentDetailScreen from './screens/PaymentDetailScreen'; // my-mall-app 연동: PaymentDetailScreen 임포트
 
 function App() {
   return (
-    <CartProvider>
-      <div className="min-h-screen bg-gray-100 font-sans antialiased">
-        <Header />
-        <main className="container mx-auto py-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2 text-left">신발 상품 목록</h2>
-          <p className="font-bold text-gray-600 text-left mb-6">현재 {products.length}개의 상품이 있습니다.</p>
-          <ProductList products={products} />
-        </main>
-      </div>
-    </CartProvider>
+    <Router>
+      <GlobalStyle />
+      <CartProvider>
+        <CardProvider>
+          <Routes>
+            <Route path="/" element={<ProductListScreen />} />
+            <Route path="/product/:id" element={<ProductDetailScreen />} />
+            <Route path="/cart" element={<CartScreen />} />
+            <Route path="/order-complete" element={<OrderCompleteScreen />} />
+            <Route path="/payment/cards" element={<CardListScreen />} />
+            <Route path="/payment/add-card" element={<AddCardScreen />} />
+            {/* my-mall-app 연동: 결제 품목 확인 페이지 라우트 추가 */}
+            <Route path="/payment/items" element={<PaymentDetailScreen />} />
+          </Routes>
+        </CardProvider>
+      </CartProvider>
+    </Router>
   );
 }
 
